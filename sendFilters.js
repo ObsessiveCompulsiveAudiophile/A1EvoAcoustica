@@ -1206,7 +1206,7 @@ async function sendSetDatCommand(send, avrStatus, rawChSetup, filterData) {
       mapChannelIdForSetDat(ocaChannel.commandId).startsWith('SW')
     ).length
 
-    if(numberOfSubs > 0) {
+    if(numberOfSubs > 2) {
       const packet3Payload = {"SubwooferSetup":{"SWNum":numberOfSubs,"SWMode":"Standard","SWLayout":"N/A"}}
       const packet3Json = JSON.stringify(packet3Payload);
       const packet3Buffer = buildAvrPacket(COMMAND_NAME, packet3Json);
