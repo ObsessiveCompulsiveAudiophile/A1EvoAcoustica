@@ -261,7 +261,6 @@ and noninfringement. Use at your own risk.
     pointer-events: none;
     white-space: nowrap;
   }
-
   .tooltip::after {
     content: '';
     position: absolute;
@@ -502,7 +501,6 @@ and noninfringement. Use at your own risk.
     transform: scale(0.85);
     transition: all 0.3s ease-in-out;
   }
-
   .manual-load-container {
     display: none;
     padding: 1.2rem;
@@ -512,12 +510,10 @@ and noninfringement. Use at your own risk.
     border-radius: 0.75rem;
     transition: all 0.3s ease;
   }
-
   .manual-load-container:hover {
     border-color: rgba(59, 130, 246, 0.5);
     background: rgba(31, 41, 55, 0.7);
   }
-
   .manual-load-text {
     display: block;
     margin-bottom: 0.8rem;
@@ -525,7 +521,6 @@ and noninfringement. Use at your own risk.
     font-weight: 600;
     font-size: 0.95rem;
   }
-
   .manual-file-input {
     width: 80%;
     margin-top: 0.5rem;
@@ -538,25 +533,20 @@ and noninfringement. Use at your own risk.
     font-size: 1rem;
     transition: all 0.2s ease;
   }
-
   .manual-file-input:hover {
     border-color: #3B82F6;
     background: rgba(17, 24, 39, 0.9);
   }
-
   .manual-file-input:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
   }
-
   .manual-error-message {
     color: #f87171;
     margin-top: 0.5rem;
     font-size: 0.85rem;
     min-height: 1.2rem;
   }
-
-  /* Style the file input button (works in modern browsers) */
   .manual-file-input::file-selector-button {
     padding: 0.5rem 1rem;
     margin-right: 1rem;
@@ -569,7 +559,6 @@ and noninfringement. Use at your own risk.
     cursor: pointer;
     transition: all 0.2s ease;
   }
-
   .manual-file-input::file-selector-button:hover {
     background: linear-gradient(45deg, #1e40af, #2563eb);
   }
@@ -1414,10 +1403,22 @@ async function checkREW() {
       const limitExceeded = rewMaxLimit < 200;
       const tcResponse = await fetch('http://localhost:4735/eq/house-curve');
       if (tcResponse.ok) {
-        targetCurvePath = await tcResponse.text();
+          const responseText = await tcResponse.text();
+          if (!responseText.trim()) {
+              targetCurvePath = null;
+          } else {
+              targetCurvePath = responseText.trim();
+              if (targetCurvePath.startsWith('"') && targetCurvePath.endsWith('"')) {
+                  targetCurvePath = targetCurvePath.slice(1, -1);
+              }
+              if (!targetCurvePath) {
+                  targetCurvePath = null;
+              }
+          }
       } else {
-        targetCurvePath = null;
+          targetCurvePath = null;
       }
+      targetCurvePath = targetCurvePath ? `"${targetCurvePath}"` : null;
       const missingTargetCurve = !targetCurvePath;
       if (emptyMeasurements || limitExceeded || missingTargetCurve) {
         if (emptyMeasurements) {
@@ -3313,7 +3314,7 @@ function handleManualConfigFileSelect(event) {
         else console.warn("handleManualConfigFileSelect: Element 'measurementChoice' not found.");
         console.log("handleManualConfigFileSelect: Attempting to call readContents()...");
         readContents();
-        console.log("handleManualConfigFileSelect: readContents() call completed.");
+        console.log("Manual config cile select mode activated!");
       } catch (parseOrProcessError) {
         console.error("handleManualConfigFileSelect: Error during parsing or processing:", parseOrProcessError);
         if (manualErrorDiv) {
@@ -3614,34 +3615,25 @@ async function postNext(processName, indices, parameters = null, maxRetries = 3)
   }}
 async function postSafe(requestUrl, parameters, message) {
   async function fetchData() {
-    // Don't JSON.stringify if parameters is already a string
     const body = typeof parameters === 'string' 
       ? parameters 
       : JSON.stringify(parameters);
-      
     const headers = typeof parameters === 'string'
-      ? { 'Content-Type': 'text/plain' }
+      ? { 'Content-Type': 'text/plain; charset=UTF-8' }
       : { 'Content-Type': 'application/json' };
-      
     const response = await fetch(requestUrl, {
       method: 'POST',
       headers,
       body,
     });
-    
     if (!response.ok) throw new Error('Network response was not OK!');
     const text = await response.text();
-    
-    // Try to parse as JSON if possible
     try {
       return JSON.parse(text);
     } catch (e) {
-      // If not JSON, return as an object with text property
       return { message: text };
     }
   }
-
-  // Rest of function remains the same
   let data = await fetchData();
   while (true) {
     if (data.message.includes(message)) {
