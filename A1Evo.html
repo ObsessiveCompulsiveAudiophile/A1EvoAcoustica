@@ -2177,7 +2177,7 @@ async function alignFronts() {
   const delayStep = 0.00003333333333333333, delayValues = [];
   for (let ts = msNeg; ts <= msPos; ts += delayStep) delayValues.push(ts);
   const inversionConfigs = [{ subInverted: false }, { subInverted: true }];
-  const optimizationStartFreq = 16, optimizationEndFreq = 350;
+  const optimizationStartFreq = subRolloffFreq, optimizationEndFreq = 350;
   let bestOverallSumPower = -Infinity, bestOverallConfig = null;
   const freqResults = [];
   for (const freq of xoCandidates) {
@@ -2438,7 +2438,7 @@ async function refFilter(index, orgIndex) {
   await postNext('Smooth', index, {smoothing: "Var"});
   const mp = await postNext('Minimum phase version', index, {'include cal': true, 'append lf tail': false, 'append hf tail': false, 'frequency warping': false, 'replicate data': true});
   mpIndex = parseInt(Object.keys(mp.results)[0], 10);
-  await postNext('Arithmetic', [nSpeakers + 2, mpIndex], {function: "A / B", maxGain: 0, lowerLimit: 16, upperLimit: 252});
+  await postNext('Arithmetic', [nSpeakers + 2, mpIndex], {function: "A / B", maxGain: 0, lowerLimit: subRolloffFreq, upperLimit: 252});
   await new Promise(resolve => setTimeout(resolve, speedDelay));
   await postNext('Smooth', mpIndex + 1, {smoothing: "None"});
   await postNext('Minimum phase version', mpIndex + 1, {'include cal': true, 'append lf tail': false, 'append hf tail': false, 'frequency warping': false, 'replicate data': true});
@@ -2685,7 +2685,7 @@ async function optimizeSubs(i1, i2, timeShiftMinMs, timeShiftMaxMs, fMax) {
   const [sub1, sub2] = await Promise.all([fetchSub(i1), fetchSub(i2)]);
   const {startFreq, freqStep, magnitude: mag1, phase: ph1} = sub1;
   const {magnitude: mag2, phase: ph2} = sub2;
-  const lowerFreq = 16, upperFreq = fMax;
+  const lowerFreq = subRolloffFreq, upperFreq = fMax;
   const startIndex = Math.ceil((lowerFreq - startFreq) / freqStep);
   const endIndex = Math.floor((upperFreq - startFreq) / freqStep);
   const nIndices = endIndex - startIndex + 1;
