@@ -2030,7 +2030,7 @@ async function sortBass() {
   lpf4LFE = bestFreq;
   minDiff = Infinity;
   bestFreq = null;
-  for (let i = 16; i <= 60; i++) {
+  for (let i = subRolloffFreq; i <= 60; i++) {
     const diff = await subHighpass(nSpeakers + 1, i);
     if (diff < minDiff) {
       minDiff = diff;
@@ -2140,9 +2140,9 @@ async function subLowpass(index, freq) {
 async function subHighpass(index, freq) {
   const response = await fetchSafe('frequency-response?smoothing=Psy&ppo=96', index);
   const {startFreq, ppo, magnitude} = response;
-  const offset1 = Math.round(ppo * (Math.log2(freq / 2) - Math.log2(startFreq)));
-  const offset2 = Math.round(ppo * (Math.log2(freq) - Math.log2(startFreq)));
-  const offset3 = Math.round(ppo * (Math.log2(freq * 2) - Math.log2(startFreq)));
+  const offset1 = Math.abs(Math.round(ppo * (Math.log2(freq / 2) - Math.log2(startFreq))));
+  const offset2 = Math.abs(Math.round(ppo * (Math.log2(freq) - Math.log2(startFreq))));
+  const offset3 = Math.abs(Math.round(ppo * (Math.log2(freq * 2) - Math.log2(startFreq))));
   const bytes2 = Uint8Array.from(atob(magnitude), c => c.charCodeAt(0));
   const data2 = new DataView(bytes2.buffer);
   const magValue1 = data2.getFloat32(offset1 * 4, false);
