@@ -10,9 +10,12 @@
     "build-linux": "pkg . --targets node18-linux-x64 --output a1-evo-acoustica-linux",
     "build-macos-x64": "pkg . --targets node18-macos-x64 --output a1-evo-acoustica-macos-x64",
     "build-macos-arm64": "pkg . --targets node18-macos-arm64 --output a1-evo-acoustica-macos-arm64",
-    "set-policy": "Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force",
+    "build-macos": "npm run build-macos-arm64 && npm run build-macos-x64",
+    "build-windows-on-unix": "pkg . --targets node18-win-x64 --output a1-evo-acoustica-win-x64",
     "build-windows": "pwsh -NoProfile -ExecutionPolicy Unrestricted -Command pkg . --targets node18-win-x64 --output a1-evo-acoustica-win-x64",
-    "build": "npm run build-windows && npm run build-linux && npm run build-macos-x64 && npm run build-macos-arm64"
+    "build:nix": "echo Building on Linux/MacOS && npm run build-linux && npm run build-macos && npm run build-windows-on-unix",
+    "build:windows": "echo Building on Windows && npm run build-windows && npm run build-linux && npm run build-macos-x64",
+    "build": "run-script-os"
   },
   "author": "OCA",
   "dependencies": {
@@ -21,7 +24,8 @@
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "pkg": "^5.8.1"
+    "pkg": "^5.8.1",
+    "run-script-os": "^1.1.6"
   },
   "pkg": {
     "scripts": [
