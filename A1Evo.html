@@ -579,24 +579,35 @@ and noninfringement. Use at your own risk.
   <h2>
   <span style="color: #2563EB; font-weight: 200;">Audio Optimization Suite</span>
   </h2>
+  
+
   <div class="slider-container">
-  <div class="slider-label">
+  <div class="crossover-sliders">
+   <div class="crossover-slider">
+ <div class="slider-label">
   <span>Sub EQ max boost</span>
-  <span id="subBoostValue">5 dB</span>
+  <span id="subBoostValue">0 dB</span>
   </div>
   <div class="tooltip-container">
   <input type="range" id="subBoostSlider" class="slider" min="0" max="6" step="0.1" value="0">
   <div class="tooltip">Maximum allowed boost amount for subwoofer EQ filters - 0dB: allows only cut filters</div>
-  </div></div>
-  <div class="slider-container">
+  </div>
+  </div>
+    
+  <div class="crossover-slider">
   <div class="slider-label">
   <span>Sub target infill</span>
   <span id="bassFillValue">0 dB</span>
   </div>
-  <div class="tooltip-container">
+   <div class="tooltip-container">
   <input type="range" id="bassFillSlider" class="slider" min="-10" max="10" step="0.5" value="0">
   <div class="tooltip">Subwoofer level adjustment offset to compensate for gaps below the target curve</div>
-  </div></div>
+  </div>
+  </div>
+   
+   </div>
+  </div>
+ 
   <div class="slider-container">
   <div class="slider-label">
   <span>Night listening volume offset:</span>
@@ -630,6 +641,35 @@ and noninfringement. Use at your own risk.
   </div>
   </div>
   </div>
+    
+    <div class="slider-container">
+  <div class="crossover-sliders">
+   <div class="crossover-slider">
+  <div class="slider-label">
+  <span>Minimum crossover frequency - center speaker</span>
+  <span id="minFreqValueC">40 Hz</span>
+  </div>
+  <div class="tooltip-container">
+  <input type="range" id="minFreqSliderC" class="slider" min="0" max="7" step="1" value="0">
+  <div class="tooltip">Select mimimum search frequency for center speaker crossover optimization</div>
+  </div>
+  </div>
+    
+  <div class="crossover-slider">
+  <div class="slider-label">
+  <span>Maximum crossover frequency - center speaker</span>
+  <span id="maxFreqValueC">250 Hz</span>
+  </div>
+  <div class="tooltip-container">
+  <input type="range" id="maxFreqSliderC" class="slider" min="0" max="10" step="1" value="10">
+  <div class="tooltip">Select maximum search frequency for center speaker crossover optimization</div>
+  </div>
+  </div>
+   
+   </div>
+  </div>
+  
+  
   <div class="slider-container">
   <div class="crossover-sliders">
   <div class="crossover-slider">
@@ -654,6 +694,7 @@ and noninfringement. Use at your own risk.
   </div>
   </div>
   </div>
+  
   <div class="option-container">
   <div class="tooltip-container">
   <label class="checkbox-label">
