@@ -596,7 +596,7 @@ and noninfringement. Use at your own risk.
   <span id="subBoostValue">5 dB</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="subBoostSlider" class="slider" min="0" max="6" step="0.1" value="0">
+  <input type="range" id="subBoostSlider" class="slider" min="0" max="12" step="0.1" value="0">
   <div class="tooltip">Maximum allowed boost amount for subwoofer EQ filters - 0dB: allows only cut filters</div>
   </div></div>
   <div class="crossover-slider">
@@ -617,17 +617,17 @@ and noninfringement. Use at your own risk.
   <span id="minFreqValueFR">40 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="minFreqSliderFR" class="slider" min="0" max="7" step="1" value="0">
+  <input type="range" id="minFreqSliderFR" class="slider" min="0" max="3" step="1" value="0">
   <div class="tooltip">Select mimimum search frequency for front speakers crossover optimization</div>
   </div>
   </div>
   <div class="crossover-slider">
   <div class="slider-label">
   <span>Maximum crossover frequency - Front mains</span>
-  <span id="maxFreqValueFR">250 Hz</span>
+  <span id="maxFreqValueFR">120 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="maxFreqSliderFR" class="slider" min="0" max="10" step="1" value="10">
+  <input type="range" id="maxFreqSliderFR" class="slider" min="0" max="3" step="1" value="3">
   <div class="tooltip">Select maximum search frequency for front speakers crossover optimization</div>
   </div>
   </div>
@@ -641,17 +641,17 @@ and noninfringement. Use at your own risk.
   <span id="minFreqValueC">40 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="minFreqSliderC" class="slider" min="0" max="7" step="1" value="0">
+  <input type="range" id="minFreqSliderC" class="slider" min="0" max="3" step="1" value="0">
   <div class="tooltip">Select mimimum search frequency for center speaker crossover optimization</div>
   </div>
   </div> 
   <div class="crossover-slider">
   <div class="slider-label">
   <span>Maximum crossover frequency - Center speaker</span>
-  <span id="maxFreqValueC">250 Hz</span>
+  <span id="maxFreqValueC">120 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="maxFreqSliderC" class="slider" min="0" max="10" step="1" value="10">
+  <input type="range" id="maxFreqSliderC" class="slider" min="0" max="3" step="1" value="10">
   <div class="tooltip">Select maximum search frequency for center speaker crossover optimization</div>
   </div>
   </div>
@@ -665,17 +665,17 @@ and noninfringement. Use at your own risk.
   <span id="minFreqValue">40 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="minFreqSlider" class="slider" min="0" max="7" step="1" value="0">
+  <input type="range" id="minFreqSlider" class="slider" min="0" max="3" step="1" value="0">
   <div class="tooltip">Select mimimum search frequency for crossover optimization</div>
   </div>
   </div>
   <div class="crossover-slider">
   <div class="slider-label">
   <span>Maximum crossover frequency - All other speakers</span>
-  <span id="maxFreqValue">250 Hz</span>
+  <span id="maxFreqValue">120 Hz</span>
   </div>
   <div class="tooltip-container">
-  <input type="range" id="maxFreqSlider" class="slider" min="0" max="10" step="1" value="10">
+  <input type="range" id="maxFreqSlider" class="slider" min="0" max="3" step="1" value="10">
   <div class="tooltip">Select maximum search frequency for crossover optimization</div>
   </div>
   </div>
@@ -749,7 +749,7 @@ let nSpeakers = null, nSubs = null, subMinTrim = -12, subMaxTrim = 12, lpf4LFE, 
 let customLevel = [], commandId = [], customDistance = [], customInvert = [], customCrossover = [], customFilter = [], deqFilter = [], subTrim = [], customMinFreq = [], customMaxFreq = [], customMinFreqFR = [], customMaxFreqFR = [], customMinFreqC = [], customMaxFreqC = [],customMargin = [], subAllPassQ = null, allpassQ = [];
 const defaultSlope = "L-R4";
 const dbValues = [-12, -15, -18, -20, -25]; //Equal loudness contours
-var subBoost = 0, bassFill = 0, levelLowVol = 2, enableInversion = false, enableWeakBass = false, minFreq = 40, maxFreq = 250, minFreqFR = 40, maxFreqFR = 250, minFreqC = 40, maxFreqC = 250,  subRolloffEnabled = false, subRolloffFreq = null, subRolloffSlope = defaultSlope, lpf4lfeValue = null;
+var subBoost = 0, bassFill = 0, levelLowVol = 2, enableInversion = false, enableWeakBass = false, minFreq = 40, maxFreq = 120, minFreqFR = 40, maxFreqFR = 120, minFreqC = 40, maxFreqC = 120,  subRolloffEnabled = false, subRolloffFreq = null, subRolloffSlope = defaultSlope, lpf4lfeValue = null;
 
 async function floatsToBase64(floatArray) {
     const nativeFloat32Data = (floatArray instanceof Float32Array) ? floatArray : new Float32Array(floatArray);
@@ -864,7 +864,7 @@ async function extractMeasurements() {
     try {
         let perfectResponse = [1, ...Array(responseLength - 1).fill(0)];
         inv_micCal = vectorDivide(perfectResponse, micCalFile);
-        splOffset = 95.0;
+        splOffset = 75.0;
     } catch (error) {
         console.error("Error preparing microphone calibration:", error);
         throwError("Failed to calculate inverse microphone calibration.");
@@ -1367,7 +1367,7 @@ async function main(){
   measurementChoice.classList.add('transitioned');
   const startTime = performance.now();
   console.infoBold(`** Customizations start **`);
-  const defaults = {subBoost: 0, bassFill: 0, levelLowVol: 2, enableInversion: false, enableWeakBass: false, minFreq: 40, maxFreq: 250, minFreqFR: 40, maxFreqFR: 250, minFreqC: 40, maxFreqC: 250};
+  const defaults = {subBoost: 0, bassFill: 0, levelLowVol: 2, enableInversion: false, enableWeakBass: false, minFreq: 40, maxFreq: 120, minFreqFR: 40, maxFreqFR: 120, minFreqC: 40, maxFreqC: 120};
   const customizations = {subBoost, bassFill, levelLowVol, enableInversion, enableWeakBass, minFreq, maxFreq, minFreqFR, maxFreqFR, minFreqC, maxFreqC};
   const descriptions = {
     subBoost: `Subwoofer EQ filters maximum allowed boost (dB): `,
@@ -1530,7 +1530,7 @@ async function resetAll(){
     console.infoUpdate(`Resetting IR windows, smoothing, EQ type, target shape and room curve settings...${(i / nTotal * 100).toFixed(2)}%`);
     await postNext('Smooth', i, {smoothing: "None"});
     await new Promise((resolve) => setTimeout(resolve, speedDelay / 10));
-    await postSafe(`${baseUrl}/${i}/ir-windows`, {leftWindowType: "Rectangular", rightWindowType: "Rectangular", addFDW: false}, "Update processed");
+    await postSafe(`${baseUrl}/${i}/ir-windows`, {leftWindowType: "Hann", rightWindowType: "Hann", addFDW: true}, "Update processed");
     await new Promise((resolve) => setTimeout(resolve, speedDelay / 10));
     await postSafe(`${baseUrl}/${i}/target-settings`, {shape: "None"}, "Update processed");
     await new Promise((resolve) => setTimeout(resolve, speedDelay / 10));
@@ -2049,10 +2049,11 @@ async function setVolumeLevels() {
   tcName = normalizedPath.split("/").pop().replace(/\.[^/.]+$/, "").replace(/\s+/g, "");
   tcName = `tc${tcName}${targetLevel.toFixed(1)}dB`;
   await fetchREW(nSpeakers + 2, 'PUT', {title: tcName, notes: 'Remember game theory!'});}
+  
 async function sortBass() {
   console.info('Anaylsing subwoofer capacity...');
   let minDiff = Infinity, bestFreq = null, exactDelta, avrDelta;
-  const xoIndex = freqIndex.filter(freq => (freq >= 120 && freq <= 250));
+  const xoIndex = freqIndex.filter(freq => (freq >= 120 && freq <= 180));
   for (const freqs of xoIndex) {
     const diff = await subLowpass(nSpeakers + 1, freqs);
     if (diff < minDiff) {
@@ -2142,7 +2143,7 @@ async function sortBass() {
   }
   let sampleCount = xt32 ? 16055 : 4096;
   const rightWindowWidth = sampleCount / 48;
-  await postSafe(`${baseUrl}/${nSpeakers + 6}/ir-windows`, {leftWindowType: "Rectangular", rightWindowType: "Rectangular", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
+  await postSafe(`${baseUrl}/${nSpeakers + 6}/ir-windows`, {leftWindowType: "Hann", rightWindowType: "Hann", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
   await postNext("Trim IR to windows", nSpeakers + 6);
   await postDelete(nSpeakers + 6);
   await postNext('Arithmetic', [nSpeakers + 1, nSpeakers + 6], {function: "A * B"});
@@ -2222,7 +2223,7 @@ async function alignFronts() {
   const ppoFreq = (s, ppo, i) => s * Math.pow(2, i / ppo);
   const ppoIndex = (f, s, ppo) => Math.log2(f / s) * ppo;
   const twoPi = 2 * Math.PI;
-  const xoCandidates = freqIndex.filter(f => f >= (minFreqFR ?? 40) && f <= (maxFreqFR ?? 250));
+  const xoCandidates = freqIndex.filter(f => f >= (minFreqFR ?? 40) && f <= (maxFreqFR ?? 120));
   const msNeg = (hardNegative ?? -20) / 1000, msPos = (hardPositive ?? 20) / 1000;
   const delayStep = 0.00003333333333333333, delayValues = [];
   for (let ts = msNeg; ts <= msPos; ts += delayStep) delayValues.push(ts);
@@ -2231,7 +2232,7 @@ async function alignFronts() {
   const subAmplitudeScalingFactor = 2; //Assuming mono bass
   console.info(`Using subwoofer amplitude scaling factor: ${subAmplitudeScalingFactor.toFixed(1)} (${(20 * Math.log10(subAmplitudeScalingFactor)).toFixed(3)} dB)`);
   console.info("Brute force searching optimal configuration, please be patient...");
-  const optimizationStartFreq = 20, optimizationEndFreq = 320;
+  const optimizationStartFreq = 20, optimizationEndFreq = 120;
   let bestOverallSumPower = -Infinity, bestOverallConfig = null;
   const freqResults = [];
   for (const freq of xoCandidates) {
@@ -2422,6 +2423,7 @@ async function fetchResponse(index, xoFreq, isSub = false, usePPO = false, allpa
         magnitude: b64ToFloat32ArrayBE(magnitude)
     };
   }}
+  
 async function optimizeSpeakers(sp1, sp2 = null) {
   const apfQValues = [0, 0.5773502692, 0.7071067812, 1.0, 1.414213562];
   const isPair = sp2 !== null;
@@ -2431,7 +2433,7 @@ async function optimizeSpeakers(sp1, sp2 = null) {
   const toRad = deg => deg * Math.PI / 180;
   const MIN_AMP_SQ = 1e-18;
   const ANALYSIS_START_F = 20;
-  const ANALYSIS_END_F = 350;
+  const ANALYSIS_END_F = 120;
   const weightFreqs = [20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500];
   const weightValues = [0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 0.95, 0.9, 0.85, 0.8];
   const weightSlopes = weightValues.map((v, i, a) => {
@@ -2476,10 +2478,10 @@ async function optimizeSpeakers(sp1, sp2 = null) {
     let min, max;
     if (isCenter) {
       min = minFreqC ?? 40;
-      max = maxFreqC ?? 250;
+      max = maxFreqC ?? 120;
     } else {
       min = minFreq ?? 40;
-      max = maxFreq ?? 250;
+      max = maxFreq ?? 120;
       if (isDolby) min = Math.max(min, 100);
     }
     return f >= min && f <= max;
@@ -2618,6 +2620,7 @@ async function optimizeSpeakers(sp1, sp2 = null) {
     allpassQ[sp2] = bestWorstq2;
     console.infoBold(`  >> Assigned Crossover: ${customCrossover[sp2]}Hz, AllpassQ2: ${allpassQ[sp2]?.toFixed(4)} to ${commandId[sp2]}`);
   }}
+  
 async function refResults(){
   console.info(`Generating magnitude and phase correction filters for normal listening mode [Flat]...`);
   for (let i = nSpeakers + 1; i <= nSpeakers + nSubs; i++) {if (customInvert[i]) {customFilter[i] = customFilter[0].map((value) => -value);} else {customFilter[i] = customFilter[0];}}
@@ -2641,6 +2644,7 @@ async function refResults(){
   }
   await postNext('Smooth', ind, {smoothing: "Var"});
   await new Promise((resolve) => setTimeout(resolve, speedDelay / 4));}
+  
 async function refFilter(index, orgIndex) {
   let sampleCount = xt32 ? 16321 : (xt ? 512 : 128);
   const rightWindowWidth = sampleCount / 48;
@@ -2685,7 +2689,7 @@ async function refFilter(index, orgIndex) {
     await postDelete(mpIndex + 6);
   }
   await postNext('Smooth', mpIndex + 6, {smoothing: "None"});
-  await postSafe(`${baseUrl}/${mpIndex + 6}/ir-windows`, {leftWindowType: "Rectangular", rightWindowType: "Rectangular", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
+  await postSafe(`${baseUrl}/${mpIndex + 6}/ir-windows`, {leftWindowType: "Hann", rightWindowType: "Hann", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
   await postNext("Trim IR to windows", mpIndex + 6);
   await postDelete(mpIndex + 6);
   await postNext('Arithmetic', [index, mpIndex + 6], {function: "A * B"});
@@ -2713,13 +2717,36 @@ async function refFilter(index, orgIndex) {
   const bytes = Uint8Array.from(atob(response.data), c => c.charCodeAt(0));
   const dataView = new DataView(bytes.buffer);
   const filter = new Array(sampleCount);
-  for (let i = 0; i < sampleCount; i++) {
-    const invertFactor = customInvert[orgIndex] ? -1.0 : 1.0;
-    filter[i] = dataView.getFloat32(i * 4, false) * 0.354813398972832 * 10 ** (cm / 20) * invertFactor;
+  //for (let i = 0; i < sampleCount; i++) {
+    //const invertFactor = customInvert[orgIndex] ? -1.0 : 1.0;
+    //filter[i] = dataView.getFloat32(i * 4, false) * 0.354813398972832 * 10 ** (cm / 20) * invertFactor;
+  //}
+  //customFilter[orgIndex] = filter;
+  let peakGain = -Infinity;
+	for (let i = 0; i < sampleCount; i++) {
+	const raw = dataView.getFloat32(i * 4, false);
+	peakGain = Math.max(peakGain, Math.abs(raw));
+	}
+
+	// Convert linear gain to dB
+	const peakGainDb = 20 * Math.log10(peakGain || 1e-9); // avoid log(0)
+
+	if (peakGainDb < 0.7) {
+		console.warn(`Skipping filter for speaker ${orgIndex} due to inaudible peak gain (${peakGainDb.toFixed(2)} dB).`);
+		customFilter[orgIndex] = Array(sampleCount).fill(0); // or identity FIR
+	} else {
+		const invertFactor = customInvert[orgIndex] ? -1.0 : 1.0;
+		const gain = 0.354813398972832 * 10 ** (cm / 20);
+		const filter = new Array(sampleCount);
+    for (let i = 0; i < sampleCount; i++) {
+    filter[i] = dataView.getFloat32(i * 4, false) * gain * invertFactor;
   }
   customFilter[orgIndex] = filter;
+}
+
   await postDelete(mpIndex + 1); await postDelete(mpIndex); await postDelete(index);
   return ;}
+  
 async function generateRoll(freq, index, isSub = false) {
   if (freq === 0) {
     await postSafe(`${baseUrl}/${index}/command`, {command: 'Response copy'}, 'Completed');
@@ -2845,7 +2872,7 @@ async function processSubConfig(subIndices) {
     await postSafe("http://localhost:4735/alignment-tool/index-b", indexB, "selected as measurement B");
     await postSafe("http://localhost:4735/alignment-tool/max-negative-delay", -maxPositiveDelay, "Maximum negative delay set");
     await postSafe("http://localhost:4735/alignment-tool/max-positive-delay", -maxNegativeDelay, "Maximum positive delay set");
-    const {bestDelay, bestInvert, finalScore} = await optimizeSubs(indexA, indexB, maxNegativeDelay, maxPositiveDelay, 250);
+    const {bestDelay, bestInvert, finalScore} = await optimizeSubs(indexA, indexB, maxNegativeDelay, maxPositiveDelay, 120);
     await postSafe(`http://localhost:4735/alignment-tool/delay-b`, bestDelay, `Value set`);
     await postSafe(`http://localhost:4735/alignment-tool/invert-b`, bestInvert, `Value set`);
     const alignedSum = await postAlign('Aligned sum');
@@ -2874,6 +2901,7 @@ async function processSubConfig(subIndices) {
     indexA = newIndex;
   }
   return {newIndex, finalScore, mSecs: mSec.slice(-subIndices.length), isInverteds: customInvert.slice(-subIndices.length)};}
+  
 async function optimizeSubs(i1, i2, timeShiftMinMs, timeShiftMaxMs, fMax) {
   async function fetchSub(index) {
     const subResponse = await fetch(`${baseUrl}/${index}/frequency-response?unit=SPL&smoothing=None`);
@@ -2941,7 +2969,16 @@ async function optimizeSubs(i1, i2, timeShiftMinMs, timeShiftMaxMs, fMax) {
         const sub2Imag = d.sub2Amp * sinPhase;
         const realSum = d.sub1Real + sub2Real;
         const imagSum = d.sub1Imag + sub2Imag;
-        sumPower += realSum * realSum + imagSum * imagSum;
+        //sumPower += realSum * realSum + imagSum * imagSum;
+		// Dip penalty?
+		//const mag = Math.sqrt(realSum * realSum + imagSum * imagSum);
+		//const dipPenalty = (mag < 0.6 * d.sub1Amp + d.sub2Amp) ? 0.85 : 1.0;
+		//sumPower += (realSum * realSum + imagSum * imagSum) * dipPenalty;
+		// Phase coherence?
+		const phaseDelta = Math.abs(Math.atan2(d.sub1Imag, d.sub1Real) - (Math.atan2(sub2Imag, sub2Real)));
+		const coherencePenalty = Math.cos(phaseDelta); // ranges from 1 (perfect) to 0 (180° out)
+		sumPower += (realSum * realSum + imagSum * imagSum) * coherencePenalty;
+
       }
       if (sumPower > bestForInversion.sumPower) bestForInversion = {sub2Inverted, timeShift: ts, sumPower};
     }
@@ -2954,9 +2991,11 @@ async function optimizeSubs(i1, i2, timeShiftMinMs, timeShiftMaxMs, fMax) {
   const bestInvert = bestConfig.sub2Inverted;
   const finalScore = overallMag;
   return {bestDelay, bestInvert, finalScore};}
+  
 async function cleanFilters(index) {
   const filters = Array.from({length: 22}, (_, i) => ({index: i + 1, type: "None", enabled: true, isAuto: true}));
   await postSafe(`${baseUrl}/${index}/filters`, { filters }, "Filters set");}
+  
 async function fixSubs4REW() {
   console.info(`Reversing 'Linkwitz Riley 250Hz 24dB/octave lowpass filter' applied by the AVR to REW subwoofer measurements...`);
   const antiLPF = {
@@ -3048,7 +3087,7 @@ async function lowVolumeFilters() {
   const subKey = parseInt(Object.keys(deqSub.results)[0], 10);
   let sampleCount = xt32 ? 16055 : 4096;
   let rightWindowWidth = sampleCount / 48;
-  await postSafe(`${baseUrl}/${subKey}/ir-windows`, {leftWindowType: "Rectangular", rightWindowType: "Rectangular", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
+  await postSafe(`${baseUrl}/${subKey}/ir-windows`, {leftWindowType: "Hann", rightWindowType: "Hann", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
   const response = await fetchSafe('impulse-response?windowed=true&normalised=true&samplerate=' + (xt32 ? '48000' : '6000'), subKey);
   const bytes = Uint8Array.from(atob(response.data), c => c.charCodeAt(0));
   const dataView = new DataView(bytes.buffer);
@@ -3067,7 +3106,7 @@ async function lowVolumeFilters() {
     const deqSp = await postNext('Arithmetic', [i, filterIndice], {function: "A * B"});
     await new Promise((resolve) => setTimeout(resolve, speedDelay));
     const spKey = parseInt(Object.keys(deqSp.results)[0], 10); 
-    await postSafe(`${baseUrl}/${spKey}/ir-windows`, {leftWindowType: "Rectangular", rightWindowType: "Rectangular", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
+    await postSafe(`${baseUrl}/${spKey}/ir-windows`, {leftWindowType: "Hann", rightWindowType: "Hann", leftWindowWidthms: 0, rightWindowWidthms: rightWindowWidth, refTimems: 0, addFDW: false}, "Update processed");
     const magResponse = await fetchSafe('frequency-response?smoothing=None', spKey);
     const {startFreq, freqStep, magnitude} = magResponse;
     const index6kHz = Math.round((6000 - startFreq) / freqStep);
@@ -3257,6 +3296,7 @@ function vectorDivide(impulseA, impulseB) {
   const Bf = math.fft(complexB);
   const Yf = math.map(Af, (val, i) => math.divide(val, Bf[i]));
   return math.ifft(Yf).map(complex => complex.re);}
+  
 async function fastConvolution(arrayData, micCalFile) {
   return new Promise((resolve, reject) => {
     const offlineCtx = new OfflineAudioContext(1, arrayData.length, 48000);
@@ -3278,6 +3318,7 @@ async function fastConvolution(arrayData, micCalFile) {
     source.start(0);
     offlineCtx.startRendering().catch(reject);
   });}
+  
 document.addEventListener('DOMContentLoaded', () => {
   autoLoadConfiguration();
   fetchAppPath().catch(err => {console.warn("Initial fetch for app path failed (may affect saving):", err.message);});
@@ -3515,7 +3556,7 @@ function readContents() {
                           "X1400H", "X1500H", "X2400H", "X2500H", "X3400H", "X3500H", "X4300H", "X4400H", "X4500H", "X6300H", "X6400H", "X6500H", "AV7703",
                           "AV7704", "AV7705", "NR1608", "NR1609", "SR5012", "SR5013", "SR6012", "SR6013", "SR7011", "SR7012", "SR7013", "SR8012" ];
   const griffinLite = ["X8500H", "AV8805", "X6700H", "X4700H", "AV7706", "SR8015", "SR7015", " AV 10", "VR-A1H", "VC-A1H", "X3800H", "X4800H", "EMA 30", "EMA 40", "EMA 50", "X6800H", "R-A10H", "C-A10H"];
-  const baseFreq = [40, 60, 80, 90, 100, 110, 120, 150, 200, 250];
+  const baseFreq = [40, 60, 80, 90, 100, 110, 120];
   const extraFreq = 180;
   const modelName = jsonContent.targetModelName;
   console.info(`Target AV receiver model: ${modelName}`);
@@ -3541,11 +3582,11 @@ function readContents() {
     const startIndex = freqIndex.indexOf(targetFreq);
     freqIndex = freqIndex.slice(startIndex);
   }
-  customMinFreq = freqIndex.filter(freq => freq < 180);
+  customMinFreq = freqIndex.filter(freq => freq < 120);
   customMaxFreq = freqIndex.filter(freq => freq >= 40);
-  customMinFreqFR = freqIndex.filter(freq => freq < 180);
+  customMinFreqFR = freqIndex.filter(freq => freq < 120);
   customMaxFreqFR = freqIndex.filter(freq => freq >= 40);
-	customMinFreqC = freqIndex.filter(freq => freq < 180);
+	customMinFreqC = freqIndex.filter(freq => freq < 120);
   customMaxFreqC = freqIndex.filter(freq => freq >= 40);
    distFL = 2.75;
   console.info(`Model specific speed of sound setting: ${sOs} m/s`);
