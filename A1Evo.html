@@ -2217,7 +2217,7 @@ async function sortBass() {
     exactDelta = targetLevel - parseFloat(swLevel, 10);
   } else {
     let lowPassFreq = null, highPassFreq = null, highPassType = null, highPassOrder = null, volumeOffset = null;
-    const lpCutoffCandidates_main_thread = freqIndex;
+    const lpCutoffCandidates_main_thread = freqIndex.filter(freq => freq >= 80);
     const workerScriptContent = `
           function freqToIndex(freq, startFreq, ppo, totalPoints) {
               if (freq < startFreq) return 0;
