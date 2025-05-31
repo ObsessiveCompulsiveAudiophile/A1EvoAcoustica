@@ -1298,6 +1298,26 @@ async function initializeApp() {
             else if (method === 'GET' && pathname === '/api/get-app-path') { 
                 res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ appPath: APP_BASE_PATH }));
             }
+            else if (method === 'GET' && pathname.endsWith('.js')) {
+                const jsFileName = path.basename(pathname);
+                const jsFilePath = path.join(__dirname, jsFileName);
+
+                if (fs.existsSync(jsFilePath)) {
+                    fs.readFile(jsFilePath, (err, data) => {
+                        if (err) {
+                            console.error(`[Server] Error reading ${jsFileName}:`, err);
+                            res.writeHead(500, { 'Content-Type': 'text/plain' });
+                            res.end('Internal Server Error');
+                        } else {
+                            res.writeHead(200, { 'Content-Type': 'application/javascript' });
+                            res.end(data);
+                        }
+                    });
+                } else {
+                    res.writeHead(404, { 'Content-Type': 'text/plain' });
+                    res.end('JavaScript file not found');
+                }
+            }
             else { 
                 res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('Not Found');
             }

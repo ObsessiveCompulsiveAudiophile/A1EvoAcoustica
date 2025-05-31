@@ -32,7 +32,10 @@
       "main.js"
     ],
     "assets": [
-      "A1Evo.html"
+      "A1Evo.html",
+      "micCalData.js",
+      "antiLPF.js",
+      "spFilter.js"
     ]
   }
 }
