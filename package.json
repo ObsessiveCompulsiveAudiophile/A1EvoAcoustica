@@ -1,11 +1,11 @@
 {
   "name": "a1-evo-acoustica",
-  "version": "7.1",
+  "version": "8.0.2",
   "description": "Sound optimizer tool for Denon & Marantz AVRs",
   "main": "main.js",
   "bin": "main.js",
   "type": "commonjs",
-    "scripts": {
+  "scripts": {
     "start": "node main.js",
     "build-linux": "pkg . --targets node18-linux-x64 --output a1-evo-acoustica-linux",
     "build-macos-x64": "pkg . --targets node18-macos-x64 --output a1-evo-acoustica-macos-x64",
@@ -33,7 +33,7 @@
     ],
     "assets": [
       "A1Evo.html",
-      "webWorker.js" 
+      "webWorker.js"
     ]
   }
 }
