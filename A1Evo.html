@@ -808,9 +808,22 @@ and noninfringement. Use at your own risk.
   </label>
   <div class="tooltip">Increase dialog clarity on center channel</div>
   </div>
-  <div class="tooltip-container" id="dialogEnhanceControls" style="display:none; margin-top: 0.2rem;"> <!-- CPC C filter modification -->
+  <div class="tooltip-container">
+  <label class="checkbox-label">
+  <input type="checkbox" id="disableAllPass">Enable allpass filters
+  </label>
+  <div class="tooltip">Evaluate and add allpass filters to minimize dips below target curve</div>
+  </div>
+  <div class="tooltip-container">
+  <label class="checkbox-label">
+  <input type="checkbox" id="weakBass">Enable double bass
+  </label>
+  <div class="tooltip">Set 'LFE + Main' bass mode and front mains as 'full range'</div>
+  </div>
+  </div>
+  <div id="dialogEnhanceControls" style="display:none; margin-top: 0.2rem;"> <!-- CPC C filter modification -->
   <!--<h4 style="color:#93c5fd; margin-bottom:0.2rem;">C Filter Settings</h4>-->
-  <table style="width:100%; color:#CBD5E0; font-size:0.7rem;">
+  <table style="width:25%; color:#CBD5E0; font-size:0.7rem; margin-left:auto; margin-right:auto;">
     <thead>
       <tr>
         <th>Index</th>
@@ -853,19 +866,6 @@ and noninfringement. Use at your own risk.
     </tbody>
   </table>
 </div>
-  <div class="tooltip-container">
-  <label class="checkbox-label">
-  <input type="checkbox" id="disableAllPass">Enable allpass filters
-  </label>
-  <div class="tooltip">Evaluate and add allpass filters to minimize dips below target curve</div>
-  </div>
-  <div class="tooltip-container">
-  <label class="checkbox-label">
-  <input type="checkbox" id="weakBass">Enable double bass
-  </label>
-  <div class="tooltip">Set 'LFE + Main' bass mode and front mains as 'full range'</div>
-  </div>
-  </div>
   <div class="rolloff-wrapper tooltip-container">
   <label class="checkbox-label">
   <input type="checkbox" id="enableRolloff">Force custom high-pass and low-pass filters for subwoofer(s)
@@ -900,7 +900,7 @@ and noninfringement. Use at your own risk.
   </div></div>
 </script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.0.1/math.min.js"></script><script>
 
-const evoVersion = "8";
+const evoVersion = "8.03";
 const baseUrl = 'http://localhost:4735/measurements', speedDelay = 255, maxDistanceLimit = 7.35;
 let micCalFile = new Array(16384).fill(0), audioCtx = null;
 let jsonName = 'receiver_config.avr', jsonType = 'avr', jsonContent = null;
