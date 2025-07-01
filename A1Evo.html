@@ -822,7 +822,11 @@ and noninfringement. Use at your own risk.
   </div>
   </div>
   <div id="dialogEnhanceControls" style="display:none; margin-top: 0.2rem;"> <!-- CPC C filter modification -->
-  <!--<h4 style="color:#93c5fd; margin-bottom:0.2rem;">C Filter Settings</h4>-->
+<h4 
+  style="color:#93c5fd; margin-bottom:0.2rem;" 
+  title="Use sparingly to further refine dialog according to your preferences.">
+  Additional C Filters
+</h4>
   <table style="width:25%; color:#CBD5E0; font-size:0.7rem; margin-left:auto; margin-right:auto;">
     <thead>
       <tr>
@@ -3907,8 +3911,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 document.getElementById('enhanceDialog').addEventListener('change', function (event) {
   UpdateDialogEn(event.target.checked, false);
-
-  // Show/hide the dialogEnhanceControls div
   var dialogControls = document.getElementById('dialogEnhanceControls');
   if (event.target.checked) {
     dialogControls.style.display = '';
