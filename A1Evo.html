@@ -808,6 +808,51 @@ and noninfringement. Use at your own risk.
   </label>
   <div class="tooltip">Increase dialog clarity on center channel</div>
   </div>
+  <div class="tooltip-container" id="dialogEnhanceControls" style="display:none; margin-top: 0.2rem;"> <!-- CPC C filter modification -->
+  <!--<h4 style="color:#93c5fd; margin-bottom:0.2rem;">C Filter Settings</h4>-->
+  <table style="width:100%; color:#CBD5E0; font-size:0.7rem;">
+    <thead>
+      <tr>
+        <th>Index</th>
+        <th>Frequency (Hz)</th>
+        <th>Gain (dB)</th>
+        <th>Q</th>
+      </tr>
+    </thead>
+    <tbody>
+	      <tr>
+        <td>1</td>
+        <td><input type="number" id="cFilterFreq1" value="80" step="5.0" style="width:60px;" min="50" max="12000"></td>
+        <td><input type="number" id="cFilterGain1" value="-3" step="0.5" style="width:45px;" min="-6" max="6"></td>
+        <td><input type="number" id="cFilterQ1" value="2" step="1.0" style="width:35px;" min="2" max="15"></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><input type="number" id="cFilterFreq2" value="120" step="5.0" style="width:60px;" min="50" max="12000"></td>
+        <td><input type="number" id="cFilterGain2" value="0" step="0.5" style="width:45px;" min="-6" max="6"></td>
+        <td><input type="number" id="cFilterQ2" value="15" step="1.0" style="width:35px;" min="2" max="15"></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><input type="number" id="cFilterFreq3" value="240" step="5.0" style="width:60px;" min="50" max="12000"></td>
+        <td><input type="number" id="cFilterGain3" value="0" step="0.5" style="width:45px;" min="-6" max="6"></td>
+        <td><input type="number" id="cFilterQ3" value="15" step="1.0" style="width:35px;" min="2" max="15"></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><input type="number" id="cFilterFreq4" value="2500" step="5.0" style="width:60px;" min="50" max="12000"></td>
+        <td><input type="number" id="cFilterGain4" value="3" step="0.5" style="width:45px;" min="-6" max="6"></td>
+        <td><input type="number" id="cFilterQ4" value="5" step="1.0" style="width:35px;" min="2" max="15"></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><input type="number" id="cFilterFreq5" value="5000" step="5.0" style="width:60px;" min="50" max="12000"></td>
+        <td><input type="number" id="cFilterGain5" value="3" step="0.5" style="width:45px;" min="-6" max="6"></td>
+        <td><input type="number" id="cFilterQ5" value="5" step="1.0" style="width:35px;" min="2" max="15"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   <div class="tooltip-container">
   <label class="checkbox-label">
   <input type="checkbox" id="disableAllPass">Enable allpass filters
@@ -855,7 +900,7 @@ and noninfringement. Use at your own risk.
   </div></div>
 </script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.0.1/math.min.js"></script><script>
 
-const evoVersion = '8.0.3';
+const evoVersion = "8";
 const baseUrl = 'http://localhost:4735/measurements', speedDelay = 255, maxDistanceLimit = 7.35;
 let micCalFile = new Array(16384).fill(0), audioCtx = null;
 let jsonName = 'receiver_config.avr', jsonType = 'avr', jsonContent = null;
@@ -3084,43 +3129,58 @@ async function refFilter(index, orgIndex) {
   await new Promise(resolve => setTimeout(resolve, speedDelay / 4));
   if (dialogEn && orgIndex === 3 && commandId[3] != "C") console.warn(`Dialogue enhancement will only work in the presence of a Center speaker. Option disengaged!`);
   if (dialogEn && orgIndex === 3 && commandId[3] === "C") {
-     const cFilters = [{
-    "index": 1,
-    "type": "PK",
-    "enabled": true,
-    "isAuto": true,
-    "frequency": 120,
-    "gaindB": 2,
-    "q": 15}, {
-    "index": 2,
-    "type": "PK",
-    "enabled": true,
-    "isAuto": true,
-    "frequency": 240,
-    "gaindB": 3,
-    "q": 15}, {
-    "index": 3,
-    "type": "PK",
-    "enabled": true,
-    "isAuto": true,
-    "frequency": 2500,
-    "gaindB": 6,
-    "q": 5}, {
-    "index": 4,
-    "type": "PK",
-    "enabled": true,
-    "isAuto": true,
-    "frequency": 5000,
-    "gaindB": 3,
-    "q": 5}, {
-    "index": 5,
-    "type": "PK",
-    "enabled": true,
-    "isAuto": true,
-    "frequency": 50,
-    "gaindB": -3,
-    "q": 5}];
-    await postSafe(`${baseUrl}/${mpIndex + 6}/filters`, {filters: cFilters}, 'Filters set');
+  function getFilterInput(id, def) {
+    const el = document.getElementById(id);
+    return el ? parseFloat(el.value) : def;
+  }
+  const cFilters = [
+    {
+      "index": 1,
+      "type": "PK",
+      "enabled": true,
+      "isAuto": true,
+      "frequency": getFilterInput('cFilterFreq1', 120),
+      "gaindB": getFilterInput('cFilterGain1', 2),
+      "q": getFilterInput('cFilterQ1', 15)
+    },
+    {
+      "index": 2,
+      "type": "PK",
+      "enabled": true,
+      "isAuto": true,
+      "frequency": getFilterInput('cFilterFreq2', 240),
+      "gaindB": getFilterInput('cFilterGain2', 3),
+      "q": getFilterInput('cFilterQ2', 15)
+    },
+    {
+      "index": 3,
+      "type": "PK",
+      "enabled": true,
+      "isAuto": true,
+      "frequency": getFilterInput('cFilterFreq3', 2500),
+      "gaindB": getFilterInput('cFilterGain3', 6),
+      "q": getFilterInput('cFilterQ3', 5)
+    },
+    {
+      "index": 4,
+      "type": "PK",
+      "enabled": true,
+      "isAuto": true,
+      "frequency": getFilterInput('cFilterFreq4', 5000),
+      "gaindB": getFilterInput('cFilterGain4', 3),
+      "q": getFilterInput('cFilterQ4', 5)
+    },
+    {
+      "index": 5,
+      "type": "PK",
+      "enabled": true,
+      "isAuto": true,
+      "frequency": getFilterInput('cFilterFreq5', 50),
+      "gaindB": getFilterInput('cFilterGain5', -3),
+      "q": getFilterInput('cFilterQ5', 5)
+    }
+  ];
+  await postSafe(`${baseUrl}/${mpIndex + 6}/filters`, {filters: cFilters}, 'Filters set');
     await new Promise(resolve => setTimeout(resolve, speedDelay / 4));
     await postNext('Generate predicted measurement', mpIndex + 6);
     await new Promise(resolve => setTimeout(resolve, speedDelay / 4));
@@ -3845,9 +3905,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('disableAllPass').addEventListener('change', function (event) {
     UpdateAllPass(event.target.checked, false);
   });
-  document.getElementById('enhanceDialog').addEventListener('change', function (event) {
-    UpdateDialogEn(event.target.checked, false);
-  });
+document.getElementById('enhanceDialog').addEventListener('change', function (event) {
+  UpdateDialogEn(event.target.checked, false);
+
+  // Show/hide the dialogEnhanceControls div
+  var dialogControls = document.getElementById('dialogEnhanceControls');
+  if (event.target.checked) {
+    dialogControls.style.display = '';
+  } else {
+    dialogControls.style.display = 'none';
+  }
+});
+document.addEventListener('DOMContentLoaded', function() {
+  var dialogControls = document.getElementById('dialogEnhanceControls');
+  var enhanceDialogCheckbox = document.getElementById('enhanceDialog');
+  dialogControls.style.display = enhanceDialogCheckbox.checked ? '' : 'none';
+});
   const rolloffToggle = document.getElementById('enableRolloff');
   const rolloffFreq = document.getElementById('rolloffFreqInput');
   const rolloffSlope = document.getElementById('rolloffSlopeSelect');
